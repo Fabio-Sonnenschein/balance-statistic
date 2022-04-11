@@ -3,29 +3,43 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
+@import "./custom-palettes";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core();
+
+$frontend-typography: mat.define-typography-config(
+    $display-4: mat.define-typography-level(112px, 112px, $font-family: 'Playfair Display')
+);
+
+@include mat.core($frontend-typography);
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$frontend-primary: mat.define-palette(mat.$indigo-palette);
-$frontend-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$frontend-primary: mat.define-palette($bs-primary-palette, 200, 50, 500);
+$frontend-secondary: mat.define-palette($bs-secondary-palette, 400, 100, 700);
+$frontend-tertiary: mat.define-palette($bs-tertiary-palette, 400, 100, 700);
+$frontend-accent: mat.define-palette($bs-tertiary-palette, 400, 100, 700);
+$frontend-neutral: mat.define-palette($bs-neutral-palette, 400, 100, 700);
+$frontend-neutral-variant: mat.define-palette($bs-neutral-variant-palette, 400, 100, 700);
 
 // The warn palette is optional (defaults to red).
-$frontend-warn: mat.define-palette(mat.$red-palette);
+$frontend-warn: mat.define-palette($bs-warn-palette, 400, 100, 700);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$frontend-theme: mat.define-light-theme((
-  color: (
-    primary: $frontend-primary,
-    accent: $frontend-accent,
-    warn: $frontend-warn,
-  )
+$frontend-theme: mat.define-dark-theme((
+    color: (
+        primary: $frontend-primary,
+        secondary: $frontend-secondary,
+        tertiary: $frontend-tertiary,
+        accent: $frontend-accent,
+        neutral: $frontend-neutral,
+        neutral-variant: $frontend-neutral-variant,
+        warn: $frontend-warn,
+    )
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -35,5 +49,7 @@ $frontend-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
+:root { font-size: 62.5%; } // Changes the default font size from 16px to 10px. This will make using rem for font sizes waaay easier.
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; }
+.mat-app-background { background-color: #1b1b1f; }
