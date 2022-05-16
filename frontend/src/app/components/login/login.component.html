@@ -1,0 +1,31 @@
+<div class="component-root center">
+    <div *ngIf="!loggedIn" class="container">
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+            <p>Welcome back</p>
+            <mat-form-field appearance="outline" hideRequiredMarker="true">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" id="email" required [(ngModel)]="this.email" name="email" autocomplete="email">
+            </mat-form-field>
+            <mat-form-field appearance="outline" hideRequiredMarker="true">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="this.passwordHidden ? 'password' : 'text'" id="password" required [(ngModel)]="this.password" name="password" autocomplete="current-password">
+                <mat-icon matSuffix (click)="this.passwordHidden = !this.passwordHidden">{{this.passwordHidden ? 'visibility' : 'visibility_off'}}</mat-icon>
+            </mat-form-field>
+            <button mat-flat-button [disabled]="!loginForm.form.valid" color="primary" type="submit">Login</button>
+            <span class="error-message">{{error}}</span>
+            <div class="signup-container">No account? No problem.
+                <a class="link" (click)="this.redirectToSignUp()">Sign up here</a>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="loggedIn" class="container logged-in-container">
+        <p>Welcome back</p>
+        <p class="logged-in-message">It seems like you are still logged in as {{this.name}}.</p>
+        <div class="logged-in-actions">
+            <button mat-button (click)="this.logout()">Log in as someone else</button>
+            <button mat-flat-button (click)="redirectToDashboard()" color="primary">Stay logged in</button>
+        </div>
+    </div>
+</div>
+
+<img src="assets/logo-background/logo-background.svg" class="logo-background">

@@ -1,0 +1,155 @@
+$dark-primary-text: #000000;
+$light-primary-text: #ffffff;
+
+$bs-primary-color: #fcc821;
+$bs-secondary-color: #625b71;
+$bs-tertiary-color: #7d5260;
+$bs-neutral-base-color: #30303A;
+$bs-neutral-color: #313034;
+$bs-neutral-variant-color: #322f37;
+$bs-background-color: #1b1b1f;
+
+$bs-primary-palette: (
+    50: #ffdf8b,
+    100: #f3c015,
+    200: #d4a500,
+    300: #b38b00,
+    400: #947200,
+    500: #765a00,
+    600: #684f00,
+    700: #5a4400,
+    800: #4c3900,
+    900: #3e2e00,
+    contrast: (
+        50: $light-primary-text,
+        100: $light-primary-text,
+        200: $light-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);
+$bs-secondary-palette: (
+    50: #eaddff,
+    100: #d1bcff,
+    200: #b79df8,
+    300: #9b82db,
+    400: #8169bf,
+    500: #6850a4,
+    600: #5b4397,
+    700: #4f378a,
+    800: #442b7e,
+    900: #381e72,
+    contrast: (
+        50: $light-primary-text,
+        100: $light-primary-text,
+        200: $light-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);
+$bs-tertiary-palette: (
+    50: #ffd8e4,
+    100: #ffb0cb,
+    200: #f38bb0,
+    300: #d47195,
+    400: #b6597c,
+    500: #984163,
+    600: #893557,
+    700: #7a294b,
+    800: #6d1d3f,
+    900: #5d1134,
+    contrast: (
+        50: $light-primary-text,
+        100: $light-primary-text,
+        200: $light-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);
+$bs-warn-palette: (
+    50: #f9dedc,
+    100: #f2b8b5,
+    200: #ec92be,
+    300: #e46962,
+    400: #dc362e,
+    500: #b3261e,
+    600: #833d3b,
+    700: #8c1d18,
+    800: #662726,
+    900: #601410,
+    contrast: (
+        50: $light-primary-text,
+        100: $light-primary-text,
+        200: $light-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);
+$bs-neutral-palette: (
+    50: #e4e1e6,
+    100: #c8c5ca,
+    200: #acaaae,
+    300: #929094,
+    400: #78767a,
+    500: #5f5e62,
+    600: #535256,
+    700: #474649,
+    800: #3c3b3f,
+    900: #313034,
+    contrast: (
+        50: $light-primary-text,
+        100: $light-primary-text,
+        200: $light-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);
+$bs-neutral-variant-palette: (
+    50: #e7e0ec,
+    100: #cac4d0,
+    200: #aea9b4,
+    300: #938f99,
+    400: #79747e,
+    500: #605d66,
+    600: #54515a,
+    700: #49454f,
+    800: #3d3a43,
+    900: #322f37,
+    contrast: (
+        50: $light-primary-text,
+        100: $light-primary-text,
+        200: $light-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);

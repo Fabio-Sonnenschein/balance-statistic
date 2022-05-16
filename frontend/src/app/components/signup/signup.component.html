@@ -1,0 +1,38 @@
+<div class="component-root center">
+    <div *ngIf="!loggedIn" class="container">
+        <form (ngSubmit)="signup()" #signupForm="ngForm">
+            <p>Nice to meet you</p>
+            <mat-form-field appearance="outline" hideRequiredMarker="true">
+                <mat-label>Name</mat-label>
+                <input matInput type="name" id="name" required [(ngModel)]="this.user.name" name="name" #name="ngModel" autocomplete="name">
+                <mat-error *ngIf="name.invalid">There is an issue with your name</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" hideRequiredMarker="true">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" id="email" required [(ngModel)]="this.user.email" name="email" #email="ngModel" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" autocomplete="email">
+                <mat-error *ngIf="email.invalid">Please enter a valid email address</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" hideRequiredMarker="true">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="this.passwordHidden ? 'password' : 'text'" id="password" required [(ngModel)]="this.user.password" name="password" minlength="8" autocomplete="new-password" #password="ngModel">
+                <mat-icon matSuffix (click)="this.passwordHidden = !this.passwordHidden">{{this.passwordHidden ? 'visibility' : 'visibility_off'}}</mat-icon>
+                <mat-error *ngIf="password.invalid">Your password needs to be at least 8 characters long</mat-error>
+            </mat-form-field>
+            <button mat-flat-button [disabled]="!signupForm.form.valid" color="primary" type="submit">Sign Up</button>
+            <span class="error-message">{{this.error}}</span>
+            <div class="login-container">Already have an account?
+                <a class="link" (click)="this.redirectToLogin()">Login here</a>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="loggedIn" class="container logged-in-container">
+        <p>Welcome back</p>
+        <p class="logged-in-message">It seems like you are still logged in as {{this.name}}.</p>
+        <div class="logged-in-actions">
+            <button mat-button (click)="this.logout(); redirectToLogin()">Log in as someone else</button>
+            <button mat-flat-button (click)="redirectToDashboard()" color="primary">Stay logged in</button>
+        </div>
+    </div>
+</div>
+
+<img src="assets/logo-background/logo-background.svg" class="logo-background">

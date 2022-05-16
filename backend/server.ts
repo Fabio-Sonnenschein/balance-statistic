@@ -6,17 +6,17 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { userRouter } from './routes/user.route';
 import { loginRouter } from './routes/login.route';
-import { registerRouter } from './routes/register.route';
+import { signupRouter } from './routes/signup.route';
 
 const app: express.Application = express();
 
 dotenv.config();
 
-console.log('\n[ *   ] [ *   ] -------------------------');
+console.log('\n[ *   ] [ *   ] -----------------------------');
 console.log('[  *  ] [  *  ]');
-console.log('[   * ] [   * ]     balance statistic');
+console.log('[   * ] [   * ]   balance statistic - ' + process.env.npm_package_version);
 console.log('[  *  ] [  *  ]');
-console.log('[ *   ] [ *   ] -------------------------\n');
+console.log('[ *   ] [ *   ] -----------------------------\n');
 
 connectToDatabase()
     .then(() => {
@@ -25,12 +25,14 @@ connectToDatabase()
         app.use(serviceMiddleware);
         app.use('/user', userRouter);
         app.use('/login', loginRouter);
-        app.use('/register', registerRouter);
+        app.use('/signup', signupRouter);
 
         app.use(errorMiddleware);
 
         app.listen(process.env.SERVER_PORT, () => {
-            console.log('[ *** ] [ SRV ] Server listening on Port');
+            console.log('[ *** ] [ SRV ] Server located in directory');
+            console.log('[     ] [ SRV ]     ' + __dirname);
+            console.log('[ *** ] [ SRV ] Server listening on port');
             console.log('[     ] [ SRV ]     ' + process.env.SERVER_PORT);
             console.log('[ *** ] [ SRV ] Server started');
             console.log('[     ] [ SRV ]     successfully.');

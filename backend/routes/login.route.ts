@@ -4,6 +4,7 @@ import {HttpException} from "../exceptions/http.exception";
 export const loginRouter: Router = Router();
 
 loginRouter.post('', async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
     if (!req.body.email || !req.body.password) {
         next(new HttpException('Bad request', 400));
         return;
@@ -13,7 +14,7 @@ loginRouter.post('', async (req: Request, res: Response, next: NextFunction) => 
     if (!user) return;
 
     let accessToken = req.services.authService.generateToken();
-    let expires = new Date(Date.now() + Number(process.env.TOKEN_EXPIRATION));
+    let expires = new Date(Date.now() + Number(process.env.TOKEN_EXPIRATION_TIME));
 
     if (!await req.services.userService.setToken(user.email, accessToken, expires).catch(error => next(error))) return;
     res.status(200).json({'token': accessToken, 'expires': expires.toISOString(), 'name': user.name});
