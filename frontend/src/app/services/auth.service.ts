@@ -48,16 +48,21 @@ export class AuthService {
         return (Boolean(this.token) && (new Date() < this.tokenExpiry));
     }
 
-    register(user: User) {
-        return this._httpClient.post(
-            this.apiURL + APIPaths.register,
-            JSON.stringify(user));
+    signup(user: User) {
+        return this._httpClient.post<AuthResponse>(
+            this.apiURL + APIPaths.signup,
+            user)
+            .pipe(tap((data: AuthResponse) => {
+                this.token = data.token;
+                this.tokenExpiry = new Date(data.expires);
+                this.name = data.name;
+            }));
     }
 
     login(email: string, password: string): Observable<AuthResponse> {
         return this._httpClient.post<AuthResponse>(
                 this.apiURL + APIPaths.login,
-                JSON.stringify({'email': email, 'password': password}))
+                {'email': email, 'password': password})
             .pipe(tap((data: AuthResponse) => {
                 this.token = data.token;
                 this.tokenExpiry = new Date(data.expires);

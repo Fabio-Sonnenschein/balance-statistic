@@ -19,11 +19,11 @@
         </form>
     </div>
     <div *ngIf="loggedIn" class="container logged-in-container">
-        <p>Welcome back 👋</p>
-        <p class="logged-in-message">It seems like you're still logged in as {{this.name}}.</p>
+        <p>Welcome back</p>
+        <p class="logged-in-message">It seems like you are still logged in as {{this.name}}.</p>
         <div class="logged-in-actions">
             <button mat-button (click)="this.logout()">Log in as someone else</button>
-            <button mat-flat-button (click)="redirectToDashboard()" color="primary">Yep, that's me</button>
+            <button mat-flat-button (click)="redirectToDashboard()" color="primary">Stay logged in</button>
         </div>
     </div>
 </div>

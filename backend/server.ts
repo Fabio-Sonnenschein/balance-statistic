@@ -6,7 +6,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { userRouter } from './routes/user.route';
 import { loginRouter } from './routes/login.route';
-import { registerRouter } from './routes/register.route';
+import { signupRouter } from './routes/signup.route';
 
 const app: express.Application = express();
 
@@ -25,7 +25,7 @@ connectToDatabase()
         app.use(serviceMiddleware);
         app.use('/user', userRouter);
         app.use('/login', loginRouter);
-        app.use('/register', registerRouter);
+        app.use('/signup', signupRouter);
 
         app.use(errorMiddleware);
 

@@ -11,6 +11,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule } from "@angular/forms";
 import { MaterialModule } from "../material.module";
+import { SetupComponent } from './components/setup/setup.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { MaterialModule } from "../material.module";
     IndexComponent,
     PageNotFoundComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    SetupComponent
   ],
     imports: [
         BrowserModule,

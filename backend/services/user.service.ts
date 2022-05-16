@@ -29,8 +29,8 @@ export class UserService {
 
     validateUser(user: User) {
         if (!(user.email && user.name && user.password)) return false;
-        if (!(/[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+/).test(user.email)) return false;
-        if (user.password.length <= 8) return false;
+        if ((/[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+/).test(user.email)) return false;
+        if (user.password.length < 8) return false;
         return true;
     }
 
