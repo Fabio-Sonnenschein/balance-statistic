@@ -6,7 +6,7 @@ export const errorMiddleware = (err: HttpException, req: Request, res: Response,
     err.message = err.message || "Internal server error";
 
     console.log('[#ERR#] [ API ] Error on Request');
-    console.log('[#   #] [ API ]     ' + req.ip, req.baseUrl, req.params);
+    console.log('[#   #] [ API ]     ' + req.url);
     console.log('[#   #] [ API ] Response');
     console.log('[#   #] [ API ]     ' + err.statusCode, err.message);
 

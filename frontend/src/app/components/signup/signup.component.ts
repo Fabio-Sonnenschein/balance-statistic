@@ -3,8 +3,7 @@ import {AuthService} from "../../services/auth.service";
 import {APIService} from "../../services/api.service";
 import {Router} from "@angular/router";
 import {User} from "../../models/user";
-import {HttpErrorResponse} from "@angular/common/http";
-import {catchError, throwError} from "rxjs";
+import {catchError} from "rxjs";
 import {AuthResponse} from "../../models/auth-response";
 
 @Component({
@@ -34,11 +33,10 @@ export class SignupComponent implements OnInit {
     signup() {
         this.error = '';
         this._authService.logout();
-        this._authService.signup(this.user).pipe(catchError(this.errorHandler))
+        this._authService.signup(this.user).pipe(catchError(this._api.errorHandler))
             .subscribe((authResponse: AuthResponse) => {
                 this.redirectToSetup();
             }, (error: string) => {
-                console.error(error);
                 this.error = error;
             });
     }
@@ -58,9 +56,5 @@ export class SignupComponent implements OnInit {
 
     redirectToDashboard() {
         this._router.navigateByUrl('/dashboard');
-    }
-
-    errorHandler(error: HttpErrorResponse) {
-        return throwError(() => 'Internal server error');
     }
 }

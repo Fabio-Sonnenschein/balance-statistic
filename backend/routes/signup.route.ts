@@ -12,14 +12,17 @@ signupRouter.post('', async (req: Request, res: Response, next: NextFunction) =>
     }
 
     let result = await req.services.userService.insertUser(user).catch((error: Error) => next(error));
-    if (!result) throw new HttpException('Email already registered', 409);
-    if (result.acknowledged === true) {
-        let accessToken = req.services.authService.generateToken();
-        let expires = new Date(Date.now() + Number(process.env.TOKEN_EXPIRATION_TIME));
-
-        if (!await req.services.userService.setToken(user.email, accessToken, expires).catch(error => next(error))) return;
-        res.status(200).json({'token': accessToken, 'expires': expires.toISOString(), 'name': user.name});
+    if (!result) {
+        next(new HttpException('Registration failed', 500));
     } else {
-        next(new HttpException('Server error', 500));
+        if (result.acknowledged === true) {
+            let accessToken = req.services.authService.generateToken();
+            let expires = new Date(Date.now() + Number(process.env.TOKEN_EXPIRATION_TIME));
+
+            if (!await req.services.userService.setToken(user.email, accessToken, expires).catch(error => next(error))) return;
+            res.status(200).json({'token': accessToken, 'expires': expires.toISOString(), 'name': user.name});
+        } else {
+            next(new HttpException('Server error', 500));
+        }
     }
 });

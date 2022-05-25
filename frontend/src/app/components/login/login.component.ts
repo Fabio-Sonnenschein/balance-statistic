@@ -3,8 +3,8 @@ import {AuthService} from "../../services/auth.service";
 import {AuthResponse} from "../../models/auth-response";
 import {catchError, throwError} from "rxjs";
 import {APIService} from "../../services/api.service";
-import {HttpErrorResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-login',
@@ -13,11 +13,10 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
     name: string;
-    email: string = '';
-    password: string = '';
     error: string = '';
     passwordHidden: boolean = true;
     loggedIn: boolean;
+    user: User = new User();
 
     constructor(private _authService: AuthService,
                 private _api: APIService,
@@ -32,7 +31,7 @@ export class LoginComponent implements OnInit {
     login() {
         this.error = '';
         this._authService.logout();
-        this._authService.login(this.email, this.password).pipe(catchError(this.errorHandler))
+        this._authService.login(this.user.email, this.user.password).pipe(catchError(this._api.errorHandler))
             .subscribe((authResponse: AuthResponse) => {
                 this.redirectToDashboard();
             }, (error: string) => {
@@ -51,9 +50,5 @@ export class LoginComponent implements OnInit {
 
     redirectToDashboard() {
         this._router.navigateByUrl('/dashboard');
-    }
-
-    errorHandler(error: HttpErrorResponse) {
-        return throwError(() => 'Internal server error');
     }
 }

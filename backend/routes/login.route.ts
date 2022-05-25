@@ -4,7 +4,6 @@ import {HttpException} from "../exceptions/http.exception";
 export const loginRouter: Router = Router();
 
 loginRouter.post('', async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     if (!req.body.email || !req.body.password) {
         next(new HttpException('Bad request', 400));
         return;

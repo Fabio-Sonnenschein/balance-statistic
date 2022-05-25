@@ -53,3 +53,15 @@ $frontend-theme: mat.define-dark-theme((
 html, body { height: 100%; }
 body { margin: 0; }
 .mat-app-background { background-color: #1b1b1f; }
+
+.mat-stepper-vertical {
+    background-color: transparent;
+}
+
+.link {
+    color: $bs-primary-color;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 1px solid $bs-primary-color;
+    padding-bottom: 2px;
+}

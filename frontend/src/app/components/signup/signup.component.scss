@@ -16,13 +16,16 @@
     flex-direction: column;
     min-width: 400px;
     padding: 25px;
-    background-color: $bs-neutral-color;
+    background-color: transparent;
     border-radius: 8px;
 
     @media screen and (max-width: 768px) {
-        background-color: transparent;
         min-width: calc(100% - (2 * 25px));
     }
+}
+
+.logged-in-container {
+    background-color: $bs-neutral-color;
 }
 
 form {
@@ -50,14 +53,6 @@ p {
 
 .login-container {
     margin: 1rem 0;
-}
-
-.link {
-    color: $bs-primary-color;
-    text-decoration: none;
-    cursor: pointer;
-    border-bottom: 1px solid $bs-primary-color;
-    padding-bottom: 1px;
 }
 
 .logged-in-message {

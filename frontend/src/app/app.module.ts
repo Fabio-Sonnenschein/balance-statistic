@@ -9,7 +9,7 @@ import { IndexComponent } from './components/index/index.component';
 import { PageNotFoundComponent } from './components/404/404.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "../material.module";
 import { SetupComponent } from './components/setup/setup.component';
 
@@ -28,7 +28,8 @@ import { SetupComponent } from './components/setup/setup.component';
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
-        MaterialModule
+        MaterialModule,
+        ReactiveFormsModule
     ],
   providers: [],
   bootstrap: [AppComponent]

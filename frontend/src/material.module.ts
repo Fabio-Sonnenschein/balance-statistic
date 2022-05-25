@@ -7,7 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 //import {MatCardModule} from '@angular/material/card';
 //import {MatCheckboxModule} from '@angular/material/checkbox';
 //import {MatChipsModule} from '@angular/material/chips';
-//import {MatStepperModule} from '@angular/material/stepper';
+import {MatStepperModule} from '@angular/material/stepper';
 //import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
@@ -45,7 +45,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 //        MatCardModule,
 //        MatCheckboxModule,
 //        MatChipsModule,
-//        MatStepperModule,
+        MatStepperModule,
 //        MatDatepickerModule,
         MatDialogModule,
         MatDividerModule,

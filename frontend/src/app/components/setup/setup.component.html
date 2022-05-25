@@ -1,1 +1,72 @@
-<p>setup works!</p>
+<div class="component-root center">
+    <div class="container">
+        <h2>Welcome to Balance Statistic</h2>
+        <p>Just a few more steps and you are ready to go.</p>
+        <div class="stepper-container">
+            <mat-stepper orientation="vertical" [linear]="true">
+                <mat-step [stepControl]="bankAccountFormGroup">
+                    <form class="step-form" [formGroup]="bankAccountFormGroup">
+                        <ng-template matStepLabel>Bank Account</ng-template>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Account Name</mat-label>
+                            <input matInput
+                                   type="text"
+                                   [(ngModel)]="this.account.name"
+                                   formControlName="accountName">
+                            <mat-error *ngIf="bankAccountFormGroup.get('accountName').errors?.required">
+                                Please enter an account name
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Account Number</mat-label>
+                            <input matInput
+                                   type="text"
+                                   [(ngModel)]="this.account.number"
+                                   (focusout)="maskNumber()"
+                                   formControlName="accountNumber">
+                            <mat-error *ngIf="bankAccountFormGroup.get('accountNumber').errors?.required">
+                                Please enter an account number
+                            </mat-error>
+                            <mat-error *ngIf="bankAccountFormGroup.get('accountNumber').errors?.maxlength">
+                                Your account number cannot exceed 34 characters
+                            </mat-error>
+                        </mat-form-field>
+                        <button mat-button matStepperNext>Continue</button>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="budgetFormGroup">
+                    <form class="step-form" [formGroup]="budgetFormGroup">
+                        <ng-template matStepLabel>Budget</ng-template>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Monthly Budget</mat-label>
+                            <input matInput
+                                   type="number"
+                                   [(ngModel)]="this.budgetPlan.budget"
+                                   formControlName="budget"
+                                   min="0">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Monthly Savings</mat-label>
+                            <input matInput
+                                   type="number"
+                                   [(ngModel)]="this.budgetPlan.savings"
+                                   formControlName="savings"
+                                   min="0">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Maximum Monthly Expenses</mat-label>
+                            <input matInput
+                                   type="number"
+                                   [(ngModel)]="this.budgetPlan.expenses"
+                                   formControlName="expenses"
+                                   min="0">
+                        </mat-form-field>
+                        <button mat-button matStepperNext>Continue</button>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </div>
+    </div>
+</div>
+
+<img src="assets/logo-background/logo-background.svg" class="logo-background">
