@@ -1,7 +1,7 @@
 <div class="component-root center">
     <div *ngIf="!loggedIn" class="container">
         <form (ngSubmit)="login()" #loginForm="ngForm">
-            <p>Welcome back</p>
+            <p class="mat-display-1">Welcome back</p>
             <mat-form-field appearance="outline" hideRequiredMarker="true">
                 <mat-label>Email</mat-label>
                 <input matInput
@@ -31,15 +31,15 @@
                 </mat-icon>
             </mat-form-field>
             <button mat-flat-button [disabled]="!loginForm.form.valid" color="primary" type="submit">Login</button>
-            <span class="error-message">{{error}}</span>
-            <div class="signup-container">No account? No problem.
+            <mat-error class="mat-body-1 error-message">{{error}}</mat-error>
+            <div class="mat-body-1 signup-container">No account? No problem.
                 <a class="link" (click)="this.redirectToSignUp()">Sign up here</a>
             </div>
         </form>
     </div>
     <div *ngIf="loggedIn" class="container logged-in-container">
-        <p>Welcome back</p>
-        <p class="logged-in-message">It seems like you are still logged in as {{this.name}}.</p>
+        <p class="mat-headline">Welcome back</p>
+        <p class="mat-body-1 logged-in-message">It seems like you are still logged in as {{this.name}}.</p>
         <div class="logged-in-actions">
             <button mat-button (click)="this.logout()">Log in as someone else</button>
             <button mat-flat-button (click)="redirectToDashboard()" color="primary">Stay logged in</button>

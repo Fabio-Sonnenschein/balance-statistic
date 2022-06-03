@@ -40,7 +40,7 @@ export class AuthService {
         localStorage.setItem('name', name);
     }
 
-    public isLoggedIn():boolean {
+    public isLoggedIn(): boolean {
         if (!(new Date() < this.tokenExpiry)) {
             this.logout();
             return false;
@@ -50,7 +50,7 @@ export class AuthService {
 
     signup(user: User) {
         return this._httpClient.post<AuthResponse>(
-            this.apiURL + APIPaths.signup,
+            this.apiURL + APIPaths.SIGNUP,
             user)
             .pipe(tap((data: AuthResponse) => {
                 this.token = data.token;
@@ -61,7 +61,7 @@ export class AuthService {
 
     login(email: string, password: string): Observable<AuthResponse> {
         return this._httpClient.post<AuthResponse>(
-                this.apiURL + APIPaths.login,
+                this.apiURL + APIPaths.LOGIN,
                 {'email': email, 'password': password})
             .pipe(tap((data: AuthResponse) => {
                 this.token = data.token;

@@ -9,8 +9,25 @@
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 
+// Import Roboto Serif
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100;0,8..144,200;0,8..144,300;0,8..144,400;0,8..144,500;0,8..144,600;0,8..144,700;0,8..144,800;0,8..144,900;1,8..144,100;1,8..144,200;1,8..144,300;1,8..144,400;1,8..144,500;1,8..144,600;1,8..144,700;1,8..144,800;1,8..144,900&display=swap');
+// Import Roboto Flex
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500;8..144,600;8..144,700;8..144,800;8..144,900;8..144,1000&display=swap');
+// Import Roboto Mono
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 $frontend-typography: mat.define-typography-config(
-    $display-4: mat.define-typography-level(112px, 112px, $font-family: 'Playfair Display')
+    $display-4: mat.define-typography-level(7rem, 7rem, $font-family: 'Roboto Serif'),
+    $display-3: mat.define-typography-level(3.5rem, 3.5rem, $font-family: 'Roboto Serif'),
+    $display-2: mat.define-typography-level(2.8125rem, 2.8125rem, $font-family: 'Roboto Flex'),
+    $display-1: mat.define-typography-level(2.125rem, 2.125rem, $font-family: 'Roboto Flex'),
+    $headline: mat.define-typography-level(1.5rem, 1.5rem, $font-family: 'Roboto Flex'),
+    $title: mat.define-typography-level(1.25rem, 1.25rem, $font-family: 'Roboto Flex'),
+    $subheading-2: mat.define-typography-level(1rem, 1rem, $font-family: 'Roboto Flex'),
+    $subheading-1: mat.define-typography-level(1rem, 1rem, $font-family: 'Roboto Flex'),
+    $body-2: mat.define-typography-level(0.875rem, 0.875rem, $font-family: 'Roboto Flex'),
+    $body-1: mat.define-typography-level(0.875rem, 0.875rem, $font-family: 'Roboto Flex'),
+    $caption: mat.define-typography-level(0.75rem, 0.75rem, $font-family: 'Roboto Flex')
 );
 
 @include mat.core($frontend-typography);
@@ -49,13 +66,22 @@ $frontend-theme: mat.define-dark-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-:root { font-size: 62.5%; } // Changes the default font size from 16px to 10px. This will make using rem for font sizes waaay easier.
+:root {
+    font-optical-sizing: none;
+}
 html, body { height: 100%; }
 body { margin: 0; }
 .mat-app-background { background-color: #1b1b1f; }
+.mat-icon {
+    font-family: 'Material Symbols Rounded', 'Material Icons' !important;
+}
 
 .mat-stepper-vertical {
     background-color: transparent;
+}
+
+button {
+    text-transform: uppercase;
 }
 
 .link {

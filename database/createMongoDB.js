@@ -26,47 +26,10 @@ db.createCollection('user', {
                     }
                 },
                 accounts: {
-                    bsonType: 'array',
-                    items: {
-                        bsonType: 'object',
-                        properties: {
-                            number: {
-                                bsonType: 'string'
-                            },
-                            balance: {
-                                bsonType: 'number'
-                            },
-                            provider: {
-                                bsonType: 'string'
-                            },
-                            type: {
-                                bsonType: 'string'
-                            }
-                        }
-                    }
+                    bsonType: 'objectId'
                 },
                 savingGoals: {
-                    bsonType: 'object',
-                    properties: {
-                        name: {
-                            bsonType: 'string'
-                        },
-                        total: {
-                            bsonType: 'number'
-                        },
-                        current: {
-                            bsonType: 'number'
-                        },
-                        rate: {
-                            bsonType: 'number'
-                        },
-                        startDate: {
-                            bsonType: 'date'
-                        },
-                        completionDate: {
-                            bsonType: 'date'
-                        }
-                    }
+                    bsonType: 'objectId'
                 },
                 budget: {
                     bsonType: 'object',
@@ -85,6 +48,67 @@ db.createCollection('user', {
     validationLevel: 'strict',
     validationAction: 'warn'
 });
+
+db.createCollection('account', {
+    validator: {
+        $jsonSchema: {
+            required: ['name', 'balance', 'type'],
+            properties: {
+                name: {
+                    bsonType: 'string'
+                },
+                number: {
+                    bsonType: 'string'
+                },
+                provider: {
+                    bsonType: 'string'
+                },
+                balance: {
+                    bsonType: 'number'
+                },
+                type: {
+                    bsonType: 'string'
+                }
+            }
+        }
+    },
+    validationLevel: 'strict',
+    validationAction: 'warn'
+});
+
+db.createCollection('savingGoal', {
+    validator: {
+        $jsonSchema: {
+            required: ['name', 'total', 'rate', 'type'],
+            properties: {
+                name: {
+                    bsonType: 'string'
+                },
+                total: {
+                    bsonType: 'number'
+                },
+                current: {
+                    bsonType: 'number'
+                },
+                rate: {
+                    bsonType: 'number'
+                },
+                startDate: {
+                    bsonType: 'date'
+                },
+                endDate: {
+                    bsonType: 'date'
+                },
+                type: {
+                    bsonType: 'string'
+                }
+            }
+        }
+    },
+    validationLevel: 'strict',
+    validationAction: 'warn'
+});
+
 db.createCollection('transaction', {
     validator: {
         $jsonSchema: {

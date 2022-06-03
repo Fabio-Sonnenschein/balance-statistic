@@ -14,14 +14,14 @@ import { MaterialModule } from "../material.module";
 import { SetupComponent } from './components/setup/setup.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    IndexComponent,
-    PageNotFoundComponent,
-    LoginComponent,
-    SignupComponent,
-    SetupComponent
-  ],
+    declarations: [
+        AppComponent,
+        IndexComponent,
+        PageNotFoundComponent,
+        LoginComponent,
+        SignupComponent,
+        SetupComponent
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -31,7 +31,7 @@ import { SetupComponent } from './components/setup/setup.component';
         MaterialModule,
         ReactiveFormsModule
     ],
-  providers: [],
-  bootstrap: [AppComponent]
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

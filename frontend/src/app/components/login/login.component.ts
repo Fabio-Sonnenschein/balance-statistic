@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {AuthResponse} from "../../models/auth-response";
-import {catchError, throwError} from "rxjs";
 import {APIService} from "../../services/api.service";
 import {Router} from "@angular/router";
 import {User} from "../../models/user";
+import {HttpErrorResponse} from "@angular/common/http";
+import {CustomError} from "../../models/custom-error";
 
 @Component({
   selector: 'app-login',
@@ -31,11 +32,18 @@ export class LoginComponent implements OnInit {
     login() {
         this.error = '';
         this._authService.logout();
-        this._authService.login(this.user.email, this.user.password).pipe(catchError(this._api.errorHandler))
-            .subscribe((authResponse: AuthResponse) => {
-                this.redirectToDashboard();
-            }, (error: string) => {
-                this.error = error;
+        this._authService.login(this.user.email, this.user.password)
+            .subscribe({
+                next: (authResponse: AuthResponse) => {
+                    this.redirectToDashboard();
+                },
+                error: (error: HttpErrorResponse) => {
+                    this._api.errorHandler(error).subscribe({
+                        next: (handledError: CustomError) => {
+                            this.error = handledError.message;
+                        }
+                    });
+                }
             });
     }
 

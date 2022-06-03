@@ -23,6 +23,15 @@
 .step-form {
     display: flex;
     flex-direction: column;
+
+    p {
+        margin: 0 0 1.5rem;
+    }
+}
+
+.error-message {
+    padding: 1.5rem 0;
+    text-align: center;
 }
 
 .logo-background {

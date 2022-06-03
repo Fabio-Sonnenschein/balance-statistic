@@ -1,19 +1,19 @@
 <div class="component-root center">
     <div class="container">
-        <h2>Welcome to Balance Statistic</h2>
-        <p>Just a few more steps and you are ready to go.</p>
-        <div class="stepper-container">
-            <mat-stepper orientation="vertical" [linear]="true">
-                <mat-step [stepControl]="bankAccountFormGroup">
-                    <form class="step-form" [formGroup]="bankAccountFormGroup">
-                        <ng-template matStepLabel>Bank Account</ng-template>
+        <h2 class="mat-display-1">Welcome to Balance Statistic</h2>
+        <p class="mat-subheading-1">Just a few more steps and you are ready to go.</p>
+        <div class="mat-body-1 stepper-container">
+            <mat-stepper orientation="vertical" [linear]="true" #stepper>
+                <mat-step [stepControl]="accountGroup">
+                    <form class="step-form" [formGroup]="accountGroup">
+                        <ng-template matStepLabel>Account Details</ng-template>
+                        <p class="mat-body-1">You can add more accounts, credit cards, and portfolios later.</p>
                         <mat-form-field appearance="outline" hideRequiredMarker="true">
                             <mat-label>Account Name</mat-label>
                             <input matInput
                                    type="text"
-                                   [(ngModel)]="this.account.name"
-                                   formControlName="accountName">
-                            <mat-error *ngIf="bankAccountFormGroup.get('accountName').errors?.required">
+                                   formControlName="name">
+                            <mat-error *ngIf="accountGroup.get('name')?.errors?.['required']">
                                 Please enter an account name
                             </mat-error>
                         </mat-form-field>
@@ -21,51 +21,61 @@
                             <mat-label>Account Number</mat-label>
                             <input matInput
                                    type="text"
-                                   [(ngModel)]="this.account.number"
-                                   (focusout)="maskNumber()"
-                                   formControlName="accountNumber">
-                            <mat-error *ngIf="bankAccountFormGroup.get('accountNumber').errors?.required">
+                                   formControlName="number" (focusout)="checkAccountNumber()">
+                            <mat-error *ngIf="accountGroup.get('number')?.errors?.['required']">
                                 Please enter an account number
                             </mat-error>
-                            <mat-error *ngIf="bankAccountFormGroup.get('accountNumber').errors?.maxlength">
+                            <mat-error *ngIf="accountGroup.get('number')?.errors?.['maxlength']">
                                 Your account number cannot exceed 34 characters
                             </mat-error>
                         </mat-form-field>
-                        <button mat-button matStepperNext>Continue</button>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Account Provider</mat-label>
+                            <input matInput
+                                   type="text"
+                                   formControlName="provider">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Balance</mat-label>
+                            <input matInput
+                                   type="number"
+                                   formControlName="balance">
+                            <mat-error *ngIf="accountGroup.get('balance')?.errors?.['required']">
+                                Please enter a balance
+                            </mat-error>
+                        </mat-form-field>
+                        <button mat-button matStepperNext>CONTINUE</button>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="budgetFormGroup">
-                    <form class="step-form" [formGroup]="budgetFormGroup">
-                        <ng-template matStepLabel>Budget</ng-template>
+                <mat-step [stepControl]="budgetGroup">
+                    <form class="step-form" [formGroup]="budgetGroup">
+                        <ng-template matStepLabel>Budget Details</ng-template>
                         <mat-form-field appearance="outline" hideRequiredMarker="true">
                             <mat-label>Monthly Budget</mat-label>
                             <input matInput
                                    type="number"
-                                   [(ngModel)]="this.budgetPlan.budget"
                                    formControlName="budget"
                                    min="0">
+                            <mat-error *ngIf="budgetGroup.get('budget')?.errors?.['required']">
+                                Please enter a monthly budget
+                            </mat-error>
                         </mat-form-field>
                         <mat-form-field appearance="outline" hideRequiredMarker="true">
-                            <mat-label>Monthly Savings</mat-label>
+                            <mat-label>Monthly Saving Rate</mat-label>
                             <input matInput
                                    type="number"
-                                   [(ngModel)]="this.budgetPlan.savings"
-                                   formControlName="savings"
+                                   formControlName="savingRate"
                                    min="0">
+                            <mat-error *ngIf="budgetGroup.get('savingRate')?.errors?.['required']">
+                                Please enter a monthly saving rate
+                            </mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" hideRequiredMarker="true">
-                            <mat-label>Maximum Monthly Expenses</mat-label>
-                            <input matInput
-                                   type="number"
-                                   [(ngModel)]="this.budgetPlan.expenses"
-                                   formControlName="expenses"
-                                   min="0">
-                        </mat-form-field>
-                        <button mat-button matStepperNext>Continue</button>
+                        <button mat-button (click)="completeSetup()">COMPLETE SETUP</button>
                     </form>
                 </mat-step>
             </mat-stepper>
         </div>
+        <mat-error class="mat-body-1 error-message">{{this.error}}</mat-error>
     </div>
 </div>
 

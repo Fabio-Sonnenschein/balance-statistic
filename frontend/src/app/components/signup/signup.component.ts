@@ -3,8 +3,9 @@ import {AuthService} from "../../services/auth.service";
 import {APIService} from "../../services/api.service";
 import {Router} from "@angular/router";
 import {User} from "../../models/user";
-import {catchError} from "rxjs";
 import {AuthResponse} from "../../models/auth-response";
+import {HttpErrorResponse} from "@angular/common/http";
+import {CustomError} from "../../models/custom-error";
 
 @Component({
   selector: 'app-signup',
@@ -33,11 +34,18 @@ export class SignupComponent implements OnInit {
     signup() {
         this.error = '';
         this._authService.logout();
-        this._authService.signup(this.user).pipe(catchError(this._api.errorHandler))
-            .subscribe((authResponse: AuthResponse) => {
-                this.redirectToSetup();
-            }, (error: string) => {
-                this.error = error;
+        this._authService.signup(this.user)
+            .subscribe({
+                next: (authResponse: AuthResponse) => {
+                    this.redirectToSetup();
+                },
+                error: (error: HttpErrorResponse) => {
+                    this._api.errorHandler(error).subscribe({
+                        next: (handledError: CustomError) => {
+                            this.error = handledError.message;
+                        }
+                    });
+                }
             });
     }
 
