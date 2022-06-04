@@ -1,5 +1,7 @@
+<img src="assets/logo-mark/logo-mark_flex.png" class="logo-head">
+
 <div class="component-root center">
-    <div *ngIf="!loggedIn" class="container">
+    <div *ngIf="!loggedIn && !loading" class="container">
         <form (ngSubmit)="login()" #loginForm="ngForm">
             <p class="mat-display-1">Welcome back</p>
             <mat-form-field appearance="outline" hideRequiredMarker="true">
@@ -44,6 +46,9 @@
             <button mat-button (click)="this.logout()">Log in as someone else</button>
             <button mat-flat-button (click)="redirectToDashboard()" color="primary">Stay logged in</button>
         </div>
+    </div>
+    <div *ngIf="loading" class="container loading-container">
+        <mat-spinner></mat-spinner>
     </div>
 </div>
 

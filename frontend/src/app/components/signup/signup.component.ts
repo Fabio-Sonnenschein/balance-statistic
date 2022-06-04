@@ -19,6 +19,7 @@ export class SignupComponent implements OnInit {
     error: string = '';
     passwordHidden: boolean = true;
     loggedIn: boolean;
+    loading: boolean = false;
     user: User = new User();
 
     constructor(private _authService: AuthService,
@@ -32,6 +33,7 @@ export class SignupComponent implements OnInit {
     }
 
     signup() {
+        this.loading = true;
         this.error = '';
         this._authService.logout();
         this._authService.signup(this.user)
@@ -43,6 +45,7 @@ export class SignupComponent implements OnInit {
                     this._api.errorHandler(error).subscribe({
                         next: (handledError: CustomError) => {
                             this.error = handledError.message;
+                            this.loading = false;
                         }
                     });
                 }

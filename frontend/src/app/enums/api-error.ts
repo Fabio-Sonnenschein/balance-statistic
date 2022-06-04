@@ -10,5 +10,5 @@ export enum APIError {
     PROBLEM_RETRY = 'There has been a problem on our end, please try again.',
     INVALID_CREDENTIALS = 'Your credentials could not be verified.',
     EMAIL_ALREADY_IN_USE = 'This email has already been used to register an account.',
-    ACCOUNT_NUMBER_ALREADY_IN_USE = 'This account number has already been used. The existing account was added to your overview.'
+    ACCOUNT_NUMBER_ALREADY_IN_USE = 'This account number has already been used.'
 }

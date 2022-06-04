@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     error: string = '';
     passwordHidden: boolean = true;
     loggedIn: boolean;
+    loading: boolean = false;
     user: User = new User();
 
     constructor(private _authService: AuthService,
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
+        this.loading = true;
         this.error = '';
         this._authService.logout();
         this._authService.login(this.user.email, this.user.password)
@@ -41,6 +43,7 @@ export class LoginComponent implements OnInit {
                     this._api.errorHandler(error).subscribe({
                         next: (handledError: CustomError) => {
                             this.error = handledError.message;
+                            this.loading = false;
                         }
                     });
                 }

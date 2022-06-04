@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {AuthService} from "./auth.service";
-import {Observable, of, tap} from "rxjs";
+import {Observable, of} from "rxjs";
 import {APIError} from "../enums/api-error";
 import {Account} from "../models/account";
 import {APIPaths} from "../enums/api-paths";
@@ -20,7 +20,7 @@ export class APIService {
     constructor(private _httpClient: HttpClient, private _authService: AuthService) { }
 
     addAccount(account: Account) {
-        return this._httpClient.post<any>(
+        return this._httpClient.post(
             this.apiURL + APIPaths.ACCOUNT,
             {
                 token: this._authService.token,
@@ -37,8 +37,7 @@ export class APIService {
                 previousNumber: previousAccountNumber,
                 account: account
             }
-        ).pipe(tap((data: any) => {
-        }));
+        );
     }
 
     removeAccount(account: Account) {
@@ -50,8 +49,7 @@ export class APIService {
                     account: account
                 }
             }
-        ).pipe(tap((data: any) => {
-        }));
+        );
     }
 
     addCard(card: Card) {
@@ -61,8 +59,7 @@ export class APIService {
                 token: this._authService.token,
                 card: card
             }
-        ).pipe(tap((data: any) => {
-        }));
+        );
     }
 
     addPortfolio(portfolio: Portfolio) {
@@ -72,8 +69,7 @@ export class APIService {
                 token: this._authService.token,
                 portfolio: portfolio
             }
-        ).pipe(tap((data: any) => {
-        }));
+        );
     }
 
     updateBudget(budget: Budget) {

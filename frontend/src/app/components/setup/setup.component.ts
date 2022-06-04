@@ -5,11 +5,10 @@ import {Budget} from "../../models/budget";
 import {AccountType} from "../../enums/account-type";
 import {DEAccountProvider} from "../../enums/de.account-provider";
 import {APIService} from "../../services/api.service";
-import {catchError} from "rxjs";
-import {AuthResponse} from "../../models/auth-response";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CustomError} from "../../models/custom-error";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-setup',
@@ -22,8 +21,10 @@ export class SetupComponent implements OnInit {
     account: Account = new Account();
     budget: Budget = new Budget();
     error: string = '';
+    loading: boolean = false;
 
     constructor(private _api: APIService,
+                private _authService: AuthService,
                 private _formBuilder: FormBuilder,
                 private _router: Router) {
         this.accountGroup = this._formBuilder.group({
@@ -39,6 +40,7 @@ export class SetupComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (!this._authService.isLoggedIn()) this._router.navigateByUrl('/login');
     }
 
     checkAccountNumber() {
@@ -74,6 +76,7 @@ export class SetupComponent implements OnInit {
     }
 
     completeSetup() {
+        this.loading = true;
         this.account.type = AccountType.CHECKING_ACCOUNT;
         this.account.name = this.accountGroup.get('name')?.value;
         this.account.number = this.accountGroup.get('number')?.value;
@@ -124,6 +127,7 @@ export class SetupComponent implements OnInit {
             this._router.navigateByUrl('/dashboard');
         }).catch((reason) => {
             this.error = reason.message;
+            this.loading = false;
         });
     }
 }

@@ -1,5 +1,7 @@
+<img src="assets/logo-mark/logo-mark_flex.png" class="logo-head">
+
 <div class="component-root center">
-    <div class="container">
+    <div *ngIf="!loading" class="container">
         <h2 class="mat-display-1">Welcome to Balance Statistic</h2>
         <p class="mat-subheading-1">Just a few more steps and you are ready to go.</p>
         <div class="mat-body-1 stepper-container">
@@ -76,6 +78,9 @@
             </mat-stepper>
         </div>
         <mat-error class="mat-body-1 error-message">{{this.error}}</mat-error>
+    </div>
+    <div *ngIf="loading" class="container loading-container">
+        <mat-spinner></mat-spinner>
     </div>
 </div>
 
