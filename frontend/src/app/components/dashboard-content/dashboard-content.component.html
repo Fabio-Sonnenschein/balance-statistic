@@ -1,0 +1,45 @@
+<div class="title-container">
+    <h2 class="mat-display-3">Hello {{name}}</h2>
+    <h3 class="mat-display-1">Your current savings total to {{_currencyService.formatNumber(2300, currency, 0)}}</h3>
+</div>
+
+<div class="content-container">
+    <h4 class="mat-headline">Monthly Overview</h4>
+    <p class="mat-body-1">You still have <span class="mat-body-2">{{_currencyService.formatNumber(300, currency, 2)}}</span> left to spend this month.</p>
+    <div class="overview-graph-container">
+        <div class="overview-graph-bar__budget"></div>
+        <div class="overview-graph-bar__earnings"></div>
+        <div class="overview-graph-bar__savings"></div>
+        <div class="overview-graph-bar__expenses"></div>
+    </div>
+    <div class="overview-details-container">
+        <div class="overview-detail-container">
+            <p class="mat-subheading-1">Savings</p>
+            <p class="mat-body-2">{{_currencyService.formatNumber(100, currency, 2)}}</p>
+        </div>
+        <div class="overview-detail-container">
+            <p class="mat-subheading-1">Budget</p>
+            <p class="mat-body-2">{{_currencyService.formatNumber(100, currency, 2)}}</p>
+        </div>
+        <div class="overview-detail-container">
+            <p class="mat-subheading-1">Earnings</p>
+            <p class="mat-body-2">{{_currencyService.formatNumber(100, currency, 2)}}</p>
+        </div>
+        <div class="overview-detail-container">
+            <p class="mat-subheading-1">Expenses</p>
+            <p class="mat-body-2">{{_currencyService.formatNumber(100, currency, 2)}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="content-container">
+    <h4 class="mat-headline">Accounts</h4>
+</div>
+
+<div class="content-container">
+    <h4 class="mat-headline">Saving Goals</h4>
+</div>
+
+<div class="content-container">
+    <h4 class="mat-headline">Recent Transactions</h4>
+</div>

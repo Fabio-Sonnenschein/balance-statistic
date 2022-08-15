@@ -1,0 +1,91 @@
+@import "src/styles";
+
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 100%;
+    bottom: 0;
+    background: linear-gradient(225deg, rgba($bs-primary-color, 1), rgba($bs-tertiary-color, 1));
+    background-size: cover;
+    transition: .75s;
+}
+
+.logo {
+    width: 4rem;
+    height: 4rem;
+    margin: 1rem 0;
+}
+
+.menu-container {
+    position: fixed;
+    top: 1.5rem;
+    left: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    button {
+        margin: 1rem 0;
+        width: 4rem;
+        height: 4rem;
+
+        mat-icon {
+            width: 2rem;
+            height: 2rem;
+            line-height: 2rem;
+        }
+    }
+}
+
+.header-action-container {
+    position: fixed;
+    top: 2.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    button {
+        margin-right: 1rem;
+        width: 4rem;
+        height: 4rem;
+
+        mat-icon {
+            width: 2rem;
+            height: 2rem;
+            line-height: 2rem;
+        }
+    }
+}
+
+.component-root {
+    position: fixed;
+    top: 0;
+    left: 13rem;
+    right: 13rem;
+    bottom: 0;
+    padding: 1.5rem 1rem;
+    overflow: auto;
+}
+
+.content-container {
+    background-color: map-get($bs-neutral-variant-palette, 900);
+    padding: 24px;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px -5px #000000;
+    animation: appendAnimation .5s;
+
+    h4 {
+        text-transform: uppercase;
+    }
+}
+
+.title-container {
+    padding: 16px;
+}

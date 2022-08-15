@@ -1,0 +1,44 @@
+<!--<div class="preloader" #preloader></div>-->
+
+<div class="menu-container">
+    <img src="assets/logo/logo.svg" class="logo">
+    <button mat-icon-button (click)="changeContent('DASHBOARD')" matTooltip="Dashboard" matTooltipPosition="after">
+        <mat-icon *ngIf="activeContent === 'DASHBOARD'" color="primary">monitoring</mat-icon>
+        <mat-icon *ngIf="activeContent !== 'DASHBOARD'">monitoring</mat-icon>
+    </button>
+    <button mat-icon-button (click)="changeContent('BALANCE')" matTooltip="Balance" matTooltipPosition="after">
+        <mat-icon *ngIf="activeContent === 'BALANCE'" color="primary">payments</mat-icon>
+        <mat-icon *ngIf="activeContent !== 'BALANCE'">payments</mat-icon>
+    </button>
+    <button mat-icon-button (click)="changeContent('SAVING_GOALS')" matTooltip="Saving Goals" matTooltipPosition="after">
+        <mat-icon *ngIf="activeContent === 'SAVING_GOALS'" color="primary">savings</mat-icon>
+        <mat-icon *ngIf="activeContent !== 'SAVING_GOALS'">savings</mat-icon>
+    </button>
+    <button mat-icon-button (click)="changeContent('ACCOUNTS')" matTooltip="Accounts" matTooltipPosition="after">
+        <mat-icon *ngIf="activeContent === 'ACCOUNTS'" color="primary">account_balance</mat-icon>
+        <mat-icon *ngIf="activeContent !== 'ACCOUNTS'">account_balance</mat-icon>
+    </button>
+    <button mat-icon-button (click)="changeContent('TRANSACTIONS')" matTooltip="Transactions" matTooltipPosition="after">
+        <mat-icon *ngIf="activeContent === 'TRANSACTIONS'" color="primary">receipt_long</mat-icon>
+        <mat-icon *ngIf="activeContent !== 'TRANSACTIONS'">receipt_long</mat-icon>
+    </button>
+    <button mat-icon-button (click)="changeContent('PREFERENCES')" matTooltip="Preferences" matTooltipPosition="after">
+        <mat-icon *ngIf="activeContent === 'PREFERENCES'" color="primary">settings</mat-icon>
+        <mat-icon *ngIf="activeContent !== 'PREFERENCES'">settings</mat-icon>
+    </button>
+</div>
+
+<div class="header-action-container">
+    <button mat-icon-button (click)="logout()" matTooltip="Logout" matTooltipPosition="below">
+        <mat-icon>logout</mat-icon>
+    </button>
+</div>
+
+<div class="component-root">
+    <app-dashboard-content *ngIf="activeContent === 'DASHBOARD'"></app-dashboard-content>
+    <app-transactions-content *ngIf="activeContent === 'BALANCE'"></app-transactions-content>
+    <app-savinggoals-content *ngIf="activeContent === 'SAVING_GOALS'"></app-savinggoals-content>
+    <app-accounts-content *ngIf="activeContent === 'ACCOUNTS'"></app-accounts-content>
+    <app-transactions-content *ngIf="activeContent === 'TRANSACTIONS'"></app-transactions-content>
+    <app-preferences-content *ngIf="activeContent === 'PREFERENCES'"></app-preferences-content>
+</div>

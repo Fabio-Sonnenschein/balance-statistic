@@ -12,6 +12,12 @@ import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "../material.module";
 import { SetupComponent } from './components/setup/setup.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardContentComponent } from './components/dashboard-content/dashboard-content.component';
+import { PreferencesContentComponent } from './components/preferences-content/preferences-content.component';
+import { TransactionsContentComponent } from './components/transactions-content/transactions-content.component';
+import { AccountsContentComponent } from './components/accounts-content/accounts-content.component';
+import { SavinggoalsContentComponent } from './components/savinggoals-content/savinggoals-content.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +26,13 @@ import { SetupComponent } from './components/setup/setup.component';
         PageNotFoundComponent,
         LoginComponent,
         SignupComponent,
-        SetupComponent
+        SetupComponent,
+        DashboardComponent,
+        DashboardContentComponent,
+        PreferencesContentComponent,
+        TransactionsContentComponent,
+        AccountsContentComponent,
+        SavinggoalsContentComponent
     ],
     imports: [
         BrowserModule,
