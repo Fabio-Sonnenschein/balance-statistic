@@ -5,6 +5,8 @@ export class Account {
     name: string;
     number: string;
     balance: number;
+    currency: string;
     provider: string;
     type: string;
+    selected: boolean;
 }

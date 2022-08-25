@@ -1,2 +1,103 @@
 @import "src/styles";
 @import "src/app/components/dashboard/dashboard.component";
+
+.overview-graph-container {
+    position: relative;
+    width: 100%;
+    margin-top: 1rem;
+
+    .overview-graph-bar {
+        position: absolute;
+        height: .75rem;
+        border-radius: 1rem;
+    }
+
+    .overview-graph-bar__budget {
+        left: 0;
+        right: 0;
+        background-color: $bs-background-color;
+    }
+
+    .overview-graph-bar__savings {
+        left: 0;
+        right: calc(100% - ((9/16)*100%));
+        background-color: $bs-primary-color;
+        animation: growLTRAnimation 1s;
+    }
+
+    .overview-graph-bar__earnings {
+        left: 0;
+        right: calc(100% - ((11/16)*100%));
+        background-color: $bs-secondary-color;
+        animation: growLTRAnimation 1s;
+    }
+
+    .overview-graph-bar__expenses {
+        left: calc(100% - ((5/16)*100%));
+        right: 0;
+        background-color: $bs-tertiary-color;
+        animation: growRTLAnimation 1s;
+    }
+
+    @keyframes growLTRAnimation {
+        0% {
+            right: 100%;
+        }
+    }
+
+    @keyframes growRTLAnimation {
+        0% {
+            left: 100%;
+        }
+    }
+}
+
+.overview-details-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 3rem;
+
+    .overview-detail-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .overview-detail-title {
+            margin-bottom: 0.5rem;
+        }
+
+        .overview-detail-figure__budget {
+            border-top: 0.25rem solid $bs-background-color;
+            padding-top: 0.5rem;
+        }
+
+        .overview-detail-figure__savings {
+            border-top: 0.25rem solid $bs-primary-color;
+            padding-top: 0.5rem;
+        }
+
+        .overview-detail-figure__earnings {
+            border-top: 0.25rem solid $bs-secondary-color;
+            padding-top: 0.5rem;
+        }
+
+        .overview-detail-figure__expenses {
+            border-top: 0.25rem solid $bs-tertiary-color;
+            padding-top: 0.5rem;
+        }
+    }
+}
+
+table {
+    width: 100%;
+
+    tr {
+        background-color: $bs-background-color;
+    }
+}
+
+.negativeValue {
+    color: $bs-warn-color;
+}
