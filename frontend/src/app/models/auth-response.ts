@@ -1,5 +1,8 @@
 export interface AuthResponse {
-    token: string,
-    expires: string,
-    name: string
+    _id: string,
+    name: string,
+    session: {
+        token: string,
+        expires: Date
+    }
 }

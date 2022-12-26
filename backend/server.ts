@@ -4,15 +4,12 @@ import { serviceMiddleware } from './middlewares/service.middleware';
 import { errorMiddleware } from './middlewares/error.middleware';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { userRouter } from './routes/user.route';
-import { loginRouter } from './routes/login.route';
-import { signupRouter } from './routes/signup.route';
+import {userRouter} from './routes/user.route';
 import {budgetRouter} from "./routes/budget.route";
 import {accountRouter} from "./routes/account.route";
-import {cardRouter} from "./routes/card.route";
-import {portfolioRouter} from "./routes/portfolio.route";
 import {savingGoalRouter} from "./routes/savinggoal.route";
 import {transactionRouter} from "./routes/transaction.route";
+import {authRouter} from "./routes/auth.route";
 
 const app: express.Application = express();
 
@@ -29,15 +26,12 @@ connectToDatabase()
         app.use(cors());
         app.use(express.json());
         app.use(serviceMiddleware);
+        app.use('/auth', authRouter);
+        app.use('/user', userRouter);
         app.use('/account', accountRouter);
         app.use('/budget', budgetRouter);
-        app.use('/card', cardRouter);
-        app.use('/login', loginRouter);
-        app.use('/portfolio', portfolioRouter);
         app.use('/savingGoal', savingGoalRouter);
-        app.use('/signup', signupRouter);
         app.use('/transaction', transactionRouter);
-        app.use('/user', userRouter);
 
         app.use(errorMiddleware);
 

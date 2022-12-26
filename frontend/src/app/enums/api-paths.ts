@@ -2,10 +2,11 @@ export enum APIPaths {
     ACCOUNT = '/account',
     BUDGET = '/budget',
     CARD = '/card',
-    LOGIN = '/login',
+    LOGIN = '/auth/login',
     PORTFOLIO = '/portfolio',
     SAVING_GOAL = '/savingGoal',
-    SIGNUP = '/signup',
+    SIGNUP = '/auth/signup',
     TRANSACTION = '/transaction',
-    USER = '/user'
+    USER = '/user',
+    LOGOUT = '/auth/logout'
 }

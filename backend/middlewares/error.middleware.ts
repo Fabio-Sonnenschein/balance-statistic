@@ -9,6 +9,8 @@ export const errorMiddleware = (err: HttpException, req: Request, res: Response,
     console.log('[#   #] [ API ]     ' + req.url);
     console.log('[#   #] [ API ] Response');
     console.log('[#   #] [ API ]     ' + err.statusCode, err.message);
+    console.log('[#   #] [ API ]');
+    console.log('[#####] [ API ] Error report concluded.');
 
     res.status(err.statusCode).send(err.statusCode + " " + err.message);
 }

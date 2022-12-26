@@ -6,7 +6,7 @@ export class User {
     email: string = '';
     password: string = '';
     session?: Session;
-    accounts?: string[];
+    accounts?: AccountObject[];
     savingGoals?: string[];
     budget?: Budget;
 }
@@ -14,4 +14,9 @@ export class User {
 class Session {
     token?: string;
     expires?: Date;
+}
+
+class AccountObject {
+    accountId: string = '';
+    sumSelect: boolean = true;
 }

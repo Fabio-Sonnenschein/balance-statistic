@@ -7,12 +7,17 @@ export class User {
     email: string;
     password: string;
     session?: Session;
-    accounts?: ObjectId[];
+    accounts?: AccountObject[];
     savingGoals?: ObjectId[];
-    budget: Budget;
+    budget?: Budget;
 }
 
 class Session {
     token: string;
     expires: Date;
+}
+
+export class AccountObject {
+    accountId: ObjectId;
+    sumSelect: boolean;
 }

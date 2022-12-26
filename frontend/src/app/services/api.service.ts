@@ -10,6 +10,7 @@ import {Card} from "../models/card";
 import {Portfolio} from "../models/portfolio";
 import {Budget} from "../models/budget";
 import {CustomError} from "../models/custom-error";
+import {SavingGoal} from "../models/saving-goal";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,18 @@ export class APIService {
     apiURL: string = environment.apiURL;
 
     constructor(private _httpClient: HttpClient, private _authService: AuthService) { }
+
+    getAccount(accountId: string) {
+        return this._httpClient.get(
+            this.apiURL + APIPaths.ACCOUNT + '/' + accountId + '/' + this._authService.token
+        );
+    }
+
+    getAccountsByUser() {
+        return this._httpClient.get<Account[]>(
+            this.apiURL + APIPaths.ACCOUNT + '/a/' + this._authService.token
+        );
+    }
 
     addAccount(account: Account) {
         return this._httpClient.post(
@@ -72,6 +85,12 @@ export class APIService {
         );
     }
 
+    getBudget() {
+        return this._httpClient.get<Budget>(
+            this.apiURL + APIPaths.BUDGET + '/' + this._authService.token
+        );
+    }
+
     updateBudget(budget: Budget) {
         return this._httpClient.put(
             this.apiURL + APIPaths.BUDGET,
@@ -79,6 +98,12 @@ export class APIService {
                 token: this._authService.token,
                 budget: budget
             }
+        );
+    }
+
+    getSavingGoals() {
+        return this._httpClient.get<SavingGoal[]>(
+            this.apiURL + APIPaths.SAVING_GOAL + '/' + this._authService.token
         );
     }
 

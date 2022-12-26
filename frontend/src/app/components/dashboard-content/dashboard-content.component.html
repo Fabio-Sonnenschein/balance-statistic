@@ -1,39 +1,39 @@
 <div class="title-container">
     <h2 class="mat-display-3">Good evening {{name}}.</h2>
-    <h3 class="mat-display-1">Your scheduled savings for this month are <span [ngClass]="900 < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(900, currency, 0)}}</span></h3>
+    <h3 class="mat-display-1">Your scheduled savings for this month are <span [ngClass]="this.budget.savingRate < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(this.budget.savingRate, currency, 0)}}</span></h3>
 </div>
 
 <div class="content-container">
     <h4 class="mat-headline">Budget Overview</h4>
     <div class="overview-graph-container">
         <div class="overview-graph-bar overview-graph-bar__budget"></div>
-        <div class="overview-graph-bar overview-graph-bar__earnings"></div>
-        <div class="overview-graph-bar overview-graph-bar__savings"></div>
-        <div class="overview-graph-bar overview-graph-bar__expenses"></div>
+        <div class="overview-graph-bar overview-graph-bar__earnings" [style]="'right: calc(100% - ((' + this.budget.earnings / this.budget.budget + ') * 100%))'"></div>
+        <div class="overview-graph-bar overview-graph-bar__savings" [style]="'right: calc(100% - ((' + this.budget.savingRate / this.budget.budget + ') * 100%))'"></div>
+        <div class="overview-graph-bar overview-graph-bar__expenses" [style]="'left: calc(100% - ((' + this.budget.expenses / this.budget.budget + ') * 100%))'"></div>
     </div>
     <div class="overview-details-container">
         <div class="overview-detail-container">
             <p class="overview-detail-title mat-subheading-1">Budget</p>
-            <p class="overview-detail-figure__budget mat-body-2" [ngClass]="1600 < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(1600, currency, 0)}}</p>
+            <p class="overview-detail-figure__budget mat-body-2" [ngClass]="this.budget.budget < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(this.budget.budget, currency, 0)}}</p>
         </div>
         <div class="overview-detail-container">
             <p class="overview-detail-title mat-subheading-1">Savings</p>
-            <p class="overview-detail-figure__savings mat-body-2" [ngClass]="900 < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(900, currency, 0)}}</p>
+            <p class="overview-detail-figure__savings mat-body-2" [ngClass]="this.budget.savingRate < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(this.budget.savingRate, currency, 0)}}</p>
         </div>
         <div class="overview-detail-container">
             <p class="overview-detail-title mat-subheading-1">Earnings</p>
-            <p class="overview-detail-figure__earnings mat-body-2" [ngClass]="1100 < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(1100, currency, 0)}}</p>
+            <p class="overview-detail-figure__earnings mat-body-2" [ngClass]="this.budget.earnings < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(this.budget.earnings, currency, 0)}}</p>
         </div>
         <div class="overview-detail-container">
             <p class="overview-detail-title mat-subheading-1">Expenses</p>
-            <p class="overview-detail-figure__expenses mat-body-2">{{_currencyService.formatNumber(500, currency, 0)}}</p>
+            <p class="overview-detail-figure__expenses mat-body-2">{{_currencyService.formatNumber(this.budget.expenses, currency, 0)}}</p>
         </div>
     </div>
 </div>
 
 <div class="content-container">
     <h4 class="mat-headline">Accounts</h4>
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="this.accountSource" matSort>
         <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? toggleAllRows() : null"
@@ -80,19 +80,114 @@
             <td mat-footer-cell *matFooterCellDef [ngClass]="this.accountTotal < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(this.accountTotal, currency)}}</td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        <tr mat-header-row *matHeaderRowDef="displayedAccountColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedAccountColumns;"
             (click)="selection.toggle(row)">
         </tr>
 
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedAccountColumns"></tr>
     </table>
 </div>
 
 <div class="content-container">
     <h4 class="mat-headline">Saving Goals</h4>
+    <div class="saving-goals-container">
+        <div class="saving-goal-container"
+             *ngFor="let savingGoal of savingGoals">
+            <div class="saving-goal-circle">
+                <svg viewBox="0 0 33.83098862 33.83098862"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <circle class="saving-goal-circle__background"
+                            stroke-width="0.25"
+                            stroke-dasharray="100, 100"
+                            stroke-linecap="round"
+                            fill="none"
+                            cx="16.91549431"
+                            cy="16.91549431"
+                            r="15.91549430918"></circle>
+                    <!-- (((element.CurrentAmount + (userBudget[0].SavingAmount / userSavings.length)) / element.TotalAmount) * 100) + ',100' -->
+                    <circle class="saving-goal-circle__circle saving-goal-circle__projection"
+                            stroke-width="2"
+                            [attr.stroke-dasharray]="(((savingGoal.current + savingGoal.rate) / savingGoal.total) * 100).toString() + ', 100'"
+                            stroke-linecap="round"
+                            fill="none"
+                            cx="16.91549431"
+                            cy="16.91549431"
+                            r="15.91549430918"></circle>
+                    <circle class="saving-goal-circle__circle saving-goal-circle__actual"
+                            stroke-width="2"
+                            [attr.stroke-dasharray]="((savingGoal.current / savingGoal.total) * 100).toString() + ', 100'"
+                            stroke-linecap="round"
+                            fill="none"
+                            cx="16.91549431"
+                            cy="16.91549431"
+                            r="15.91549430918"></circle>
+                </svg>
+            </div>
+            <div class="saving-goal-details">
+                <span class="saving-goal-details__current mat-subheading-2">{{savingGoal.current}}</span>
+                <div class="saving-goal-details__divider"></div>
+                <span class="saving-goal-details__goal mat-subheading-2">{{savingGoal.total}}</span>
+            </div>
+            <h4 class="saving-goal-header mat-title">{{savingGoal.name}}</h4>
+        </div>
+    </div>
 </div>
 
 <div class="content-container">
     <h4 class="mat-headline">Recent Transactions</h4>
+    <table mat-table [dataSource]="this.transactionSource" matSort>
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? updateAccountTotal(row) : null"
+                              [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
+            <td mat-cell *matCellDef="let element"><mat-icon>{{typeIcon(element.type)}}</mat-icon></td>
+            <td mat-footer-cell *matFooterCellDef><mat-icon>functions</mat-icon></td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
+            <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            <td mat-footer-cell *matFooterCellDef>Total</td>
+        </ng-container>
+
+        <ng-container matColumnDef="number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="number">Account Number</th>
+            <td mat-cell *matCellDef="let element">{{element.number}}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="provider">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="provider">Provider</th>
+            <td mat-cell *matCellDef="let element">{{element.provider}}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="balance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="balance">Balance</th>
+            <td mat-cell *matCellDef="let element" [ngClass]="element.balance < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(element.balance, element.currency)}}</td>
+            <td mat-footer-cell *matFooterCellDef [ngClass]="this.accountTotal < 0 ? 'negativeValue' : ''">{{_currencyService.formatNumber(this.accountTotal, currency)}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedTransactionColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedTransactionColumns;"
+            (click)="selection.toggle(row)">
+        </tr>
+
+        <tr mat-footer-row *matFooterRowDef="displayedTransactionColumns"></tr>
+    </table>
 </div>

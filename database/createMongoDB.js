@@ -26,18 +26,38 @@ db.createCollection('user', {
                     }
                 },
                 accounts: {
-                    bsonType: 'objectId'
+                    bsonType: 'array',
+                    items: {
+                        bsonType: 'object',
+                        properties: {
+                            accountId: {
+                                bsonType: 'objectId'
+                            },
+                            sumSelect: {
+                                bsonType: 'bool'
+                            }
+                        }
+                    }
                 },
                 savingGoals: {
-                    bsonType: 'objectId'
+                    bsonType: 'array',
+                    items: {
+                        bsonType: 'objectId'
+                    }
                 },
                 budget: {
                     bsonType: 'object',
                     properties: {
-                        savingrate: {
+                        savingRate: {
                             bsonType: 'number'
                         },
                         budget: {
+                            bsonType: 'number'
+                        },
+                        earnings: {
+                            bsonType: 'number'
+                        },
+                        expenses: {
                             bsonType: 'number'
                         }
                     }
@@ -52,8 +72,22 @@ db.createCollection('user', {
 db.createCollection('account', {
     validator: {
         $jsonSchema: {
-            required: ['name', 'balance', 'type'],
+            required: ['name', 'balance', 'type', 'currency', 'access'],
             properties: {
+                access: {
+                    bsonType: 'object',
+                    properties: {
+                        owner: {
+                            bsonType: 'objectId'
+                        },
+                        subscribers: {
+                            bsonType: 'array',
+                            items: {
+                                bsonType: 'objectId'
+                            }
+                        }
+                    }
+                },
                 name: {
                     bsonType: 'string'
                 },
@@ -68,6 +102,9 @@ db.createCollection('account', {
                 },
                 type: {
                     bsonType: 'string'
+                },
+                currency: {
+                    bsonType: 'string'
                 }
             }
         }
@@ -79,9 +116,12 @@ db.createCollection('account', {
 db.createCollection('savingGoal', {
     validator: {
         $jsonSchema: {
-            required: ['name', 'total', 'rate', 'type'],
+            required: ['name', 'total', 'current', 'access', 'category', 'accountId', 'startDate'],
             properties: {
                 name: {
+                    bsonType: 'string'
+                },
+                description: {
                     bsonType: 'string'
                 },
                 total: {
@@ -90,17 +130,39 @@ db.createCollection('savingGoal', {
                 current: {
                     bsonType: 'number'
                 },
-                rate: {
-                    bsonType: 'number'
-                },
                 startDate: {
                     bsonType: 'date'
                 },
                 endDate: {
                     bsonType: 'date'
                 },
-                type: {
+                category: {
                     bsonType: 'string'
+                },
+                access: {
+                    bsonType: 'object',
+                    properties: {
+                        owner: {
+                            bsonType: 'objectId'
+                        },
+                        contributors: {
+                            bsonType: 'array',
+                            items: {
+                                bsonType: 'object',
+                                properties: {
+                                    userId: {
+                                        bsonType: 'objectId'
+                                    },
+                                    rate: {
+                                        bsonType: 'number'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                account: {
+                    bsonType: 'objectId'
                 }
             }
         }
@@ -112,14 +174,8 @@ db.createCollection('savingGoal', {
 db.createCollection('transaction', {
     validator: {
         $jsonSchema: {
-            required: ['sender', 'receiver', 'amount'],
+            required: ['sender', 'receiver.receiverId', 'amount', 'timestamp', 'type'],
             properties: {
-                sender: {
-                    bsonType: 'objectId'
-                },
-                receiver: {
-                    bsonType: 'objectId'
-                },
                 amount: {
                     bsonType: 'number'
                 },
@@ -131,7 +187,88 @@ db.createCollection('transaction', {
                 },
                 timestamp: {
                     bsonType: 'date'
+                },
+                description: {
+                    bsonType: 'string'
+                },
+                sender: {
+                    bsonType: 'object',
+                    properties: {
+                        senderId: {
+                            bsonType: 'objectId'
+                        },
+                        senderAccount: {
+                            bsonType: 'objectId'
+                        }
+                    }
+                },
+                receiver: {
+                    bsonType: 'object',
+                    properties: {
+                        receiverId: {
+                            bsonType: 'objectId'
+                        },
+                        receiverAccount: {
+                            bsonType: 'objectId'
+                        }
+                    }
+                },
+                recurrenceId: {
+                    bsonType: 'objectId'
+                },
+                owner: {
+                    bsonType: 'objectId'
                 }
+            }
+        }
+    },
+    validationLevel: 'strict',
+    validationAction: 'warn'
+});
+
+db.createCollection('recurrence', {
+    $jsonSchema: {
+        required: ['name', 'creationDate', 'occurrence', 'sender', 'receiver.receiverId', 'amount'],
+        properties: {
+            name: {
+                bsonType: 'string'
+            },
+            description: {
+                bsonType: 'string'
+            },
+            creationDate: {
+                bsonType: 'date'
+            },
+            occurrence: {
+                bsonType: 'string'
+            },
+            category: {
+                bsonType: 'string'
+            },
+            sender: {
+                bsonType: 'object',
+                properties: {
+                    senderId: {
+                        bsonType: 'objectId'
+                    },
+                    senderAccount: {
+                        bsonType: 'objectId'
+                    }
+                }
+            },
+            receiver: {
+                bsonType: 'object',
+                properties: {
+                    receiverId: {
+                        bsonType: 'objectId'
+                    },
+                    receiverAccount: {
+                        bsonType: 'objectId'
+                    }
+                }
+            },
+            amount: {
+                bsonType: 'number'
             }
         }
     },

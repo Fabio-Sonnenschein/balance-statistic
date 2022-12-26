@@ -40,6 +40,14 @@ export class AuthService {
         localStorage.setItem('name', name);
     }
 
+    public get _id(): string {
+        return localStorage.getItem('_id') || '';
+    }
+
+    public set _id(_id: string) {
+        localStorage.setItem('_id', _id);
+    }
+
     public isLoggedIn(): boolean {
         if (!(new Date() < this.tokenExpiry)) {
             this.logout();
@@ -53,8 +61,9 @@ export class AuthService {
             this.apiURL + APIPaths.SIGNUP,
             user)
             .pipe(tap((data: AuthResponse) => {
-                this.token = data.token;
-                this.tokenExpiry = new Date(data.expires);
+                this._id = data._id
+                this.token = data.session.token;
+                this.tokenExpiry = new Date(data.session.expires);
                 this.name = data.name;
             }));
     }
@@ -64,8 +73,8 @@ export class AuthService {
                 this.apiURL + APIPaths.LOGIN,
                 {'email': email, 'password': password})
             .pipe(tap((data: AuthResponse) => {
-                this.token = data.token;
-                this.tokenExpiry = new Date(data.expires);
+                this.token = data.session.token;
+                this.tokenExpiry = new Date(data.session.expires);
                 this.name = data.name;
             }));
     }

@@ -58,14 +58,14 @@ export class SignupComponent implements OnInit {
     }
 
     redirectToLogin() {
-        this._router.navigateByUrl('/login');
+        this._router.navigateByUrl('/login').then();
     }
 
     redirectToSetup() {
-        this._router.navigateByUrl('/setup');
+        this._router.navigateByUrl('/setup').then();
     }
 
     redirectToDashboard() {
-        this._router.navigateByUrl('/dashboard');
+        this._router.navigateByUrl('/dashboard').then();
     }
 }

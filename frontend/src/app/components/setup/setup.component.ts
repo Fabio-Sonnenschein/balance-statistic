@@ -35,7 +35,8 @@ export class SetupComponent implements OnInit {
         });
         this.budgetGroup = this._formBuilder.group({
             budget: ['', Validators.required],
-            savingRate: ['', Validators.required]
+            savingRate: ['', Validators.required],
+            earnings: ['', Validators.required]
         });
     }
 
@@ -85,6 +86,7 @@ export class SetupComponent implements OnInit {
 
         this.budget.budget = this.budgetGroup.get('budget')?.value;
         this.budget.savingRate = this.budgetGroup.get('savingRate')?.value;
+        this.budget.earnings = this.budgetGroup.get('earnings')?.value;
 
         let updateAccount: Promise<boolean> = new Promise((resolve, reject) => {
             this._api.addAccount(this.account)

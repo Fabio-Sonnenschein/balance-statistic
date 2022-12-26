@@ -72,6 +72,16 @@
                                 Please enter a monthly saving rate
                             </mat-error>
                         </mat-form-field>
+                        <mat-form-field appearance="outline" hideRequiredMarker="true">
+                            <mat-label>Monthly Earnings</mat-label>
+                            <input matInput
+                                   type="number"
+                                   formControlName="earnings"
+                                   min="0">
+                            <mat-error *ngIf="budgetGroup.get('earnings')?.errors?.['required']">
+                                Please enter a monthly income
+                            </mat-error>
+                        </mat-form-field>
                         <button mat-button (click)="completeSetup()">COMPLETE SETUP</button>
                     </form>
                 </mat-step>
