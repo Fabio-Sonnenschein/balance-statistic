@@ -19,18 +19,23 @@ transactionRouter.get('/:transactionId/:userToken', async (req: Request, res: Re
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.params.userToken, req, next);
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.params.userToken, req)
+    .catch((error: Error) => {
+      next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   let transactionId: ObjectId = plainToInstance(ObjectId, req.params.transactionId);
-  let transaction: Transaction = await req.services.transactionService.getTransactionById(new ObjectId(transactionId), next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!transaction) return;
+  let transaction: Transaction = await req.services.transactionService.getTransactionById(new ObjectId(transactionId))
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!transaction) return next(new HttpException('Transaction retrieval failed', 500));
 
-  if (req.services.transactionService.checkTransactionAffiliation(transaction, user._id, next)) {
-    res.status(200).json(transaction);
+  if (!req.services.transactionService.checkTransactionAffiliation(transaction, user._id)) {
+    return next(new HttpException('Transaction access violation', 401));
   }
+  res.status(200).json(transaction);
 });
 
 transactionRouter.get('/user/:userToken', async (req: Request, res: Response, next: NextFunction) => {
@@ -38,8 +43,11 @@ transactionRouter.get('/user/:userToken', async (req: Request, res: Response, ne
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.params.userToken, req, next);
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.params.userToken, req)
+    .catch((error: Error) => {
+      throw error;
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   let count: number = parseInt(process.env.STANDARD_TRANSACTION_COUNT);
   if (req.query.c) {
@@ -51,11 +59,11 @@ transactionRouter.get('/user/:userToken', async (req: Request, res: Response, ne
     offset = parseInt(<string>req.query.o);
   }
 
-  let transactions = await req.services.transactionService.getTransactionsByUser(user._id, count, offset, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!transactions) return;
-
+  let transactions = await req.services.transactionService.getTransactionsByUser(user._id, count, offset)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!transactions) return next(new HttpException('Transaction retrieval failed', 500));
   res.status(200).json(transactions);
 });
 
@@ -72,18 +80,21 @@ transactionRouter.post('', async (req: Request, res: Response, next: NextFunctio
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next);
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   let transaction: Transaction = plainToInstance(Transaction, req.body.transaction);
   transaction.owner = user._id;
   transaction.status = TransactionStatus.REGISTERED;
 
-  let transactionId = await req.services.transactionService.insertTransaction(user._id, transaction, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!transactionId) return;
-
+  let transactionId = await req.services.transactionService.insertTransaction(user._id, transaction)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!transactionId) return next(new HttpException('Transaction insertion failed', 500));
   res.status(200).json(transactionId);
 });
 
@@ -94,14 +105,17 @@ transactionRouter.put('/category', async (req: Request, res: Response, next: Nex
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.transactionService.updateTransactionCategory(user._id, req.body.transaction._id, req.body.transaction.category, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.transactionService.updateTransactionCategory(user._id, req.body.transaction._id, req.body.transaction.category)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Transaction update failed', 500));
   res.status(200).json(true);
 });
 
@@ -112,14 +126,17 @@ transactionRouter.put('/description', async (req: Request, res: Response, next: 
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.transactionService.updateTransactionDescription(user._id, req.body.transaction._id, req.body.transaction.description, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.transactionService.updateTransactionDescription(user._id, req.body.transaction._id, req.body.transaction.description)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Transaction update failed', 500));
   res.status(200).json(true);
 });
 
@@ -129,13 +146,16 @@ transactionRouter.delete('', async (req: Request, res: Response, next: NextFunct
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.transactionService.removeTransaction(user._id, req.body.transaction._id, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let deleteQuery = await req.services.transactionService.removeTransaction(user._id, req.body.transaction._id)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!deleteQuery) return next(new HttpException('Transaction removal failed', 500));
   res.status(200).json(true);
 });

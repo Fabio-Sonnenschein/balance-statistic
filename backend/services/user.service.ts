@@ -6,40 +6,56 @@ import {
 } from '../models/user';
 import {sha512} from 'js-sha512';
 import {ObjectId} from 'mongodb';
-import {NextFunction} from 'express';
 
 export class UserService {
-  async getUserById(userId: ObjectId, next: NextFunction) {
-    return await collections.user.findOne<User>({_id: new ObjectId(userId)})
-      .catch((error: Error) => {
-        return next(error);
-      });
+  async getUserById(userId: ObjectId) {
+    let user: User = await collections.user.findOne<User>({
+      _id: new ObjectId(userId)
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!user) throw new HttpException('User not found', 404);
+    return user;
   }
 
-  async getUserByToken(token: string, next: NextFunction) {
-    return await collections.user.findOne<User>({'session.token': token})
-      .catch((error: Error) => {
-        return next(error);
-      });
+  async getUserByToken(token: string) {
+    let user: User = await collections.user.findOne<User>({
+      'session.token': token
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!user) throw new HttpException('User not found', 404);
+    return user;
   }
 
-  async getUserByEmail(email: string, next: NextFunction) {
-    return await collections.user.findOne<User>({email: email})
-      .catch((error: Error) => {
-        return next(error);
-      });
+  async getUserByEmail(email: string) {
+    let user: User = await collections.user.findOne<User>({
+      email: email
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!user) throw new HttpException('User not found', 404);
+    return user;
   }
 
-  async insertUser(user: User, next: NextFunction) {
-    let existingUser = await collections.user.findOne<User>({email: user.email});
-    if (existingUser) return next(new HttpException('Email already registered', 409));
+  async insertUser(user: User) {
+    let existingUser = await collections.user.findOne<User>({
+      email: user.email
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (existingUser) throw new HttpException('Email already registered', 409);
 
     user.password = sha512(user.password);
-    return collections.user.insertOne(user);
+    let insertQuery = await collections.user.insertOne(user);
+    if (!insertQuery.acknowledged) throw new HttpException('User creation failed', 500);
+    return insertQuery.insertedId;
   }
 
-  async setToken(userId: ObjectId, token: string, expires: Date, next: NextFunction) {
-    let updateQuery = await collections.user.updateOne({_id: new ObjectId(userId)}, {
+  async setToken(userId: ObjectId, token: string, expires: Date) {
+    let updateQuery = await collections.user.updateOne({
+      _id: new ObjectId(userId)
+    }, {
       $set: {
         session: {
           token: token,
@@ -47,14 +63,14 @@ export class UserService {
         }
       }
     });
-    if (updateQuery.modifiedCount !== 1) {
-      return next(new HttpException('Token update failed', 500));
-    }
+    if (!updateQuery.acknowledged) throw new HttpException('Token update failed', 500);
     return true;
   }
 
-  async unsetToken(userId: ObjectId, next: NextFunction) {
-    let updateQuery = await collections.user.updateOne({_id: new ObjectId(userId)}, {
+  async unsetToken(userId: ObjectId) {
+    let updateQuery = await collections.user.updateOne({
+      _id: new ObjectId(userId)
+    }, {
       $set: {
         session: {
           token: null,
@@ -62,46 +78,64 @@ export class UserService {
         }
       }
     });
-    if (updateQuery.modifiedCount !== 1) {
-      return next(new HttpException('Token update failed', 500));
-    }
+    if (updateQuery.acknowledged) throw new HttpException('Token update failed', 500);
     return true;
   }
 
-  async deleteUser(userId: ObjectId, next: NextFunction) {
-    let user = collections.user.deleteOne({_id: new ObjectId(userId)});
-    if (!user) {
-      return next(new HttpException('User removal failed', 500));
-    }
+  async deleteUser(userId: ObjectId) {
+    let user = await collections.user.deleteOne({
+      _id: new ObjectId(userId)
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!user.acknowledged) throw new HttpException('User removal failed', 500);
     return true;
   }
 
-  async updateUserName(userId: ObjectId, name: string, next: NextFunction) {
-    let query = await collections.user.updateOne({_id: new ObjectId(userId)}, {$set: {name: name}});
-    if (query.modifiedCount !== 1) {
-      return next(new HttpException('User update failed', 500));
-    }
+  async updateUserName(userId: ObjectId, name: string) {
+    let query = await collections.user.updateOne({
+      _id: new ObjectId(userId)
+    }, {
+      $set: {
+        name: name
+      }
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!query.acknowledged) throw new HttpException('User update failed', 500);
     return true;
   }
 
-  async updateUserEmail(userId: ObjectId, email: string, next: NextFunction) {
-    let query = await collections.user.updateOne({_id: new ObjectId(userId)}, {$set: {email: email}});
-    if (query.modifiedCount !== 1) {
-      return next(new HttpException('User update failed', 500));
-    }
+  async updateUserEmail(userId: ObjectId, email: string) {
+    let query = await collections.user.updateOne({
+      _id: new ObjectId(userId)
+    }, {
+      $set: {
+        email: email
+      }
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!query.acknowledged) throw new HttpException('User update failed', 500);
     return true;
   }
 
-  async updateUserPassword(userId: ObjectId, password: string, next: NextFunction) {
+  async updateUserPassword(userId: ObjectId, password: string) {
     password = sha512(password);
-    let query = await collections.user.updateOne({_id: new ObjectId(userId)}, {$set: {password: password}});
-    if (query.modifiedCount !== 1) {
-      return next(new HttpException('User update failed', 500));
-    }
+    let query = await collections.user.updateOne({
+      _id: new ObjectId(userId)
+    }, {
+      $set: {
+        password: password
+      }
+    }).catch((error: Error) => {
+      throw error;
+    });
+    if (!query.acknowledged) throw new HttpException('User update failed', 500);
     return true;
   }
 
-  async updateUserAccountSelect(userId: ObjectId, account: AccountObject, next: NextFunction) {
+  async updateUserAccountSelect(userId: ObjectId, account: AccountObject) {
     // TODO: Check if this query is working as intended
     let query = await collections.user.updateOne({
       $and: {
@@ -112,10 +146,10 @@ export class UserService {
       $set: {
         'accounts.sumSelect': account.sumSelect
       }
+    }).catch((error: Error) => {
+      throw error;
     });
-    if (query.modifiedCount !== 1) {
-      return next(new HttpException('User update failed', 500));
-    }
+    if (!query.acknowledged) throw new HttpException('User update failed', 500);
     return true;
   }
 
@@ -127,19 +161,28 @@ export class UserService {
   }
 
   projectUser(user: User,
-              name: boolean,
-              email: boolean,
-              session: boolean,
-              accounts: boolean,
-              budget: boolean,
-              savingGoals: boolean) {
-    if (!name) delete user.name;
-    if (!email) delete user.email;
+              options: {
+                name?: boolean,
+                email?: boolean,
+                session?: boolean,
+                accounts?: boolean,
+                budget?: boolean,
+                savingGoals?: boolean
+              } = {
+                name: false,
+                email: false,
+                session: false,
+                accounts: false,
+                budget: false,
+                savingGoals: false
+              }) {
+    if (!options.name) delete user.name;
+    if (!options.email) delete user.email;
     delete user.password; // For security reasons, the password hash must not be sent from the server to any client.
-    if (!session) delete user.session;
-    if (!accounts) delete user.accounts;
-    if (!budget) delete user.budget;
-    if (!savingGoals) delete user.savingGoals;
+    if (!options.session) delete user.session;
+    if (!options.accounts) delete user.accounts;
+    if (!options.budget) delete user.budget;
+    if (!options.savingGoals) delete user.savingGoals;
     return user;
   }
 }

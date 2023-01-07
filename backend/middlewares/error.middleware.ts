@@ -1,16 +1,21 @@
-import { Request, Response, NextFunction } from 'express';
-import { HttpException } from '../exceptions/http.exception';
+import {
+  Request,
+  Response,
+  NextFunction
+} from 'express';
+import {HttpException} from '../exceptions/http.exception';
 
-export const errorMiddleware = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
-    err.statusCode = err.statusCode || 500;
-    err.message = err.message || "Internal server error";
+export const errorMiddleware = (error: HttpException, req: Request, res: Response, next: NextFunction) => {
+  error.statusCode = error.statusCode || 500;
+  error.message = error.message || 'Internal server error';
 
-    console.log('[#ERR#] [ API ] Error on Request');
-    console.log('[#   #] [ API ]     ' + req.url);
-    console.log('[#   #] [ API ] Response');
-    console.log('[#   #] [ API ]     ' + err.statusCode, err.message);
-    console.log('[#   #] [ API ]');
-    console.log('[#####] [ API ] Error report concluded.');
+  console.log('[#ERR#] [ API ] Error on Request');
+  console.log('[#   #] [ API ]     ' + req.url);
+  console.log('[#   #] [ API ] Response');
+  console.log('[#   #] [ API ]     ' + error.statusCode, error.message);
+  console.log('[#   #] [ API ]');
+  console.log('[#####] [ API ] Error report concluded.');
+  console.log('[     ] [     ]');
 
-    res.status(err.statusCode).send(err.statusCode + " " + err.message);
-}
+  res.status(error.statusCode).send(error.statusCode + ' ' + error.message);
+};

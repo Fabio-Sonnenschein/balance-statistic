@@ -16,13 +16,12 @@ authRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
     return next(new HttpException('User invalid', 400));
   }
 
-  let result = await req.services.userService.insertUser(user, next)
+  let result = await req.services.userService.insertUser(user)
     .catch((error: Error) => {
       return next(error);
     });
   if (!result) return next(new HttpException('Registration failed', 500));
-  if (!result.acknowledged) return next(new HttpException('Server error', 500));
-  let session = await req.services.authService.generateToken(result.insertedId, req, next)
+  let session = await req.services.authService.generateToken(result.insertedId, req)
     .catch((error: Error) => {
       return next(error);
     });
@@ -34,11 +33,11 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     return next(new HttpException('Bad request', 400));
   }
 
-  let user = await req.services.authService.authUser(req.body.email, req.body.password, req, next)
+  let user = await req.services.authService.authUser(req.body.email, req.body.password, req)
     .catch((error: Error) => {
       return next(error);
     });
-  if (!user) return;
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   res.status(200).json(user);
 });
@@ -48,15 +47,16 @@ authRouter.post('/logout', async (req: Request, res: Response, next: NextFunctio
     return next(new HttpException('Bad request', 400));
   }
 
-  let user = await req.services.authService.authToken(req.body.token, req, next)
+  let user = await req.services.authService.authToken(req.body.token, req)
     .catch((error: Error) => {
       return next(error);
     });
-  if (!user) return;
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  await req.services.userService.unsetToken(user._id, next).catch((error: Error) => {
-    return next(Error);
-  });
+  await req.services.userService.unsetToken(user._id)
+    .catch((error: Error) => {
+      return next(error);
+    });
 
   res.status(200).json(true);
 });

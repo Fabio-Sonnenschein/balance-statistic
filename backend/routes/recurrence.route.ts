@@ -19,17 +19,22 @@ recurrenceRouter.get('/:recurrenceId/:userToken', async (req: Request, res: Resp
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.params.userToken, req, next);
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.params.userToken, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   let recurrenceId: ObjectId = plainToInstance(ObjectId, req.params.recurrenceId);
-  let recurrence: Recurrence = await req.services.recurrenceService.getRecurrenceById(new ObjectId(recurrenceId), next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!recurrence) return;
-  if (req.services.recurrenceService.checkRecurrenceAffiliation(recurrence, user.accounts, next)) {
-    res.status(200).json(recurrence);
+  let recurrence: Recurrence = await req.services.recurrenceService.getRecurrenceById(new ObjectId(recurrenceId))
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!recurrence) return next(new HttpException('Recurrence not found', 404));
+  if (!req.services.recurrenceService.checkRecurrenceAffiliation(recurrence, user.accounts)) {
+    return next(new HttpException('Recurrence access violation', 401));
   }
+  res.status(200).json(recurrence);
 });
 
 recurrenceRouter.post('', async (req: Request, res: Response, next: NextFunction) => {
@@ -44,18 +49,20 @@ recurrenceRouter.post('', async (req: Request, res: Response, next: NextFunction
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   let recurrence: Recurrence = plainToInstance(Recurrence, req.body.recurrence);
   recurrence.sender.senderId = user._id;
 
-  let recurrenceId = await req.services.recurrenceService.insertRecurrence(recurrence, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!recurrenceId) return;
+  let recurrenceId = await req.services.recurrenceService.insertRecurrence(recurrence)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!recurrenceId) return next(new HttpException('Recurrence insertion failed', 500));
   res.status(200).json(recurrenceId);
 });
 
@@ -66,14 +73,17 @@ recurrenceRouter.put('/name', async (req: Request, res: Response, next: NextFunc
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceService.updateRecurrenceName(user._id, req.body.recurrence._id, req.body.recurrence.name, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceService.updateRecurrenceName(user._id, req.body.recurrence._id, req.body.recurrence.name)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Recurrence update failed', 500));
   res.status(200).json(true);
 });
 
@@ -84,14 +94,17 @@ recurrenceRouter.put('/description', async (req: Request, res: Response, next: N
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authServices.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authServices.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceServices.updateRecurrenceDescription(user._id, req.body.recurrence._id, req.body.recurrence.name, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceServices.updateRecurrenceDescription(user._id, req.body.recurrence._id, req.body.recurrence.name)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Recurrence update failed', 500));
   res.status(200).json(true);
 });
 
@@ -102,14 +115,17 @@ recurrenceRouter.put('/creationDate', async (req: Request, res: Response, next: 
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceService.updateRecurrenceCreationDate(user._id, req.body.recurrence._id, req.body.recurrence.name, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceService.updateRecurrenceCreationDate(user._id, req.body.recurrence._id, req.body.recurrence.name)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Recurrence update failed', 500));
   res.status(200).json(true);
 });
 
@@ -120,14 +136,17 @@ recurrenceRouter.put('/occurrence', async (req: Request, res: Response, next: Ne
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authServices.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authServices.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceService.updateRecurrenceOccurrence(user._id, req.body.recurrence._id, req.body.recurrence.occurrence, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceService.updateRecurrenceOccurrence(user._id, req.body.recurrence._id, req.body.recurrence.occurrence)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('User not authorized', 401));
   res.status(200).json(true);
 });
 
@@ -138,14 +157,17 @@ recurrenceRouter.put('/category', async (req: Request, res: Response, next: Next
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceService.updateRecurrenceCategory(user._id, req.body.recurrence._id, req.body.recurrence.category, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceService.updateRecurrenceCategory(user._id, req.body.recurrence._id, req.body.recurrence.category)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Recurrence update failed', 500));
   res.status(200).json(true);
 });
 
@@ -157,16 +179,19 @@ recurrenceRouter.put('/receiver', async (req: Request, res: Response, next: Next
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
   let receiver: Receiver = plainToInstance(Receiver, req.body.recurrence.receiver);
 
-  if (!await req.services.recurrenceService.updateRecurrenceReceiver(user._id, req.body.recurrence._id, receiver, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceService.updateRecurrenceReceiver(user._id, req.body.recurrence._id, receiver)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('Recurrence update failed', 500));
   res.status(200).json(true);
 });
 
@@ -177,14 +202,17 @@ recurrenceRouter.put('/amount', async (req: Request, res: Response, next: NextFu
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceService.updateRecurrenceAmount(user._id, req.body.recurrence._id, req.body.recurrence.amount, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let update = await req.services.recurrenceService.updateRecurrenceAmount(user._id, req.body.recurrence._id, req.body.recurrence.amount)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!update) return next(new HttpException('User not authorized', 401));
   res.status(200).json(true);
 });
 
@@ -194,13 +222,16 @@ recurrenceRouter.delete('', async (req: Request, res: Response, next: NextFuncti
     return next(new HttpException('Bad request', 400));
   }
 
-  let user: User = await req.services.authService.authToken(req.body.token, req, next).catch((error: Error) => {
-    return next(error);
-  });
-  if (!user) return;
+  let user: User = await req.services.authService.authToken(req.body.token, req)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!user) return next(new HttpException('Request unauthorized', 401));
 
-  if (!await req.services.recurrenceService.removeRecurrence(user._id, req.body.account._id, next).catch((error: Error) => {
-    return next(error);
-  })) return;
+  let deleteQuery = await req.services.recurrenceService.removeRecurrence(user._id, req.body.account._id)
+    .catch((error: Error) => {
+      return next(error);
+    });
+  if (!deleteQuery) return next(new HttpException('Recurrence removal failed', 500));
   res.status(200).json(true);
 });
